@@ -128,6 +128,8 @@ async def create_book(library_id: str, book: Book):
     collections = get_collections(library_id)
     book_dict = book.model_dump()
     collections['books'].insert_one(book_dict)
+    # Remove MongoDB ObjectId before returning
+    book_dict.pop('_id', None)
     return {"message": "Book created successfully", "book": book_dict}
 
 @app.get("/api/library/{library_id}/books/{book_id}")
