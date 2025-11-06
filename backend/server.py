@@ -85,6 +85,8 @@ async def create_teacher(library_id: str, teacher: Teacher):
     collections = get_collections(library_id)
     teacher_dict = teacher.model_dump()
     collections['teachers'].insert_one(teacher_dict)
+    # Remove MongoDB ObjectId before returning
+    teacher_dict.pop('_id', None)
     return {"message": "Teacher created successfully", "teacher": teacher_dict}
 
 @app.get("/api/library/{library_id}/teachers/{teacher_id}")
