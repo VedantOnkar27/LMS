@@ -175,6 +175,8 @@ async def create_magazine(library_id: str, magazine: Magazine):
     collections = get_collections(library_id)
     magazine_dict = magazine.model_dump()
     collections['magazines'].insert_one(magazine_dict)
+    # Remove MongoDB ObjectId before returning
+    magazine_dict.pop('_id', None)
     return {"message": "Magazine created successfully", "magazine": magazine_dict}
 
 @app.get("/api/library/{library_id}/magazines/{magazine_id}")
